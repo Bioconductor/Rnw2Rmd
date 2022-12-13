@@ -1,0 +1,20 @@
+Package: Rnw2Rmd
+Title: Initial conversion from Rnw to Rmd
+Version: 0.99.0
+Authors@R: 
+    person("Marcel", "Ramos", , "marcel.ramos@sph.cuny.edu",
+        c("aut", "cre"), c(ORCID = "0000-0002-3242-0582")
+    )
+Description: The package works on vignettes to convert Rnw to Rmd file
+  formats. Though not complete, there are additional auto-modifications
+  to vignettes to make conversion more manageable.
+Imports:
+  BiocManager,
+  mdsr,
+  tools,
+  utils,
+  whisker
+License: Artistic-2.0
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
