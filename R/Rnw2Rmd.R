@@ -136,8 +136,6 @@ Rnw2Rmd <- function(from, to, validate = TRUE) {
     any(grepl(pat, x = text))
 }
 
-whisker::whisker.render("\\\\{{word}}\\{", data = c(word = "title"))
-
 .identify_front <- function(text) {
 
     date <- "`r format(Sys.time(), '%B %d, %Y')`"
