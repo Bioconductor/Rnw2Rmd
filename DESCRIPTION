@@ -10,10 +10,11 @@ Description: The package works on vignettes to convert Rnw to Rmd file
   to vignettes to make conversion more manageable.
 Imports:
   BiocManager,
-  mdsr,
   tools,
   utils,
   whisker
+Suggests:
+  mdsr
 License: Artistic-2.0
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
