@@ -106,7 +106,6 @@ Rnw2Rmd <- function(from, to, validate = TRUE) {
     x <- gsub("(<<)(.*)(>>=)", "```{r \\2}", x)
     x <- gsub("^@", "```", x)
     x <- gsub("(\\\\Sexpr\\{)([^\\}]+)(\\})", "`r \\2`", x)
-browser()
     x <- gsub("(\\\\chapter\\{)([^\\}]+)(\\})", "# \\2", x)
     x <- gsub("(\\\\section\\{)([^\\}]+)(\\})", "## \\2", x)
     x <- gsub("(\\\\subsection\\{)([^\\}]+)(\\})", "### \\2",
