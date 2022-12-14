@@ -180,7 +180,7 @@ Rnw2Rmd <- function(from, to, validate = TRUE) {
     )
 
     datalist <- .identify_front(text)
-    capture.output(cat(
+    utils::capture.output(cat(
         whisker::whisker.render(template, data = datalist)
     ))
 }
@@ -214,7 +214,7 @@ Rnw2Rmd <- function(from, to, validate = TRUE) {
     indpos <- which(!nzchar(text))
     diffs <- diff(indpos)
     groups <- split(indpos, cumsum(c(1, diffs != 1)))
-    selections <- unlist(lapply(groups, head, 2))
+    selections <- unlist(lapply(groups, utils::head, 2))
     rinds <- setdiff(indpos, selections)
     text[-rinds]
 }
