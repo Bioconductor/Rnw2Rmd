@@ -42,7 +42,7 @@ Rnw2Rmd <- function(from, to, validate = TRUE) {
     ## replace Rpkg with Biocpkg or CRANpkg
     if (!validate)
         new_vig <- gsub(
-            "(\\\\Rpackage\\{)([^\\}]+)(\\})", "`r Biocpkg \\2`", new_vig
+            "(\\\\Rpackage\\{)([^\\}]+)(\\})", "`r Biocpkg(\"\\2\")`", new_vig
         )
     else
         new_vig <- .validate_replace_tag_pkg(new_vig)
@@ -86,7 +86,7 @@ Rnw2Rmd <- function(from, to, validate = TRUE) {
         function(tag, reptext) {
             gsub(
                 "(\\\\Rpackage\\{)([^\\}]+)(\\})",
-                paste("`r", tag, "\\2`"),
+                paste0("`r ", tag, "(\"\\2\")`"),
                 reptext
             )
         }, tag = results[pkgs], reptext = text,
