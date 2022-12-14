@@ -20,17 +20,20 @@ Rnw2Rmd <- function(from, to, validate = TRUE) {
     if (missing(to))
         to <- gsub(tools::file_ext(from), "Rmd", from)
 
-    vig <- readLines(from)
+    new_vig <- readLines(from)
     ## fix escaped underscores
-    new_vig <- gsub("\\_", "_", fixed = TRUE, vig)
+    new_vig <- gsub("\\_", "_", fixed = TRUE, new_vig)
     ## remove stray %%
     new_vig <- gsub("%%", "", fixed = TRUE, new_vig)
     ## replace {} with `` in special R tags
+    new_vig <- .remove_tex_chunk(new_vig)
     new_vig <- gsub(
         "(\\\\(Rclass|Rfunction|Rcode|Robject)\\{)([^\\}]+)(\\})",
         "`\\3`",
         new_vig
     )
+    ## replace funky sections
+    new_vig <- gsub("(\\\\section\\*+\\{)([^\\}]+)(\\})", "## \\2", new_vig)
     ## replace complicated code
     new_vig <- gsub(
         "\\\\Rcode\\{(?<=\\{)(.+?)(?=\\})\\}", "`\\1`", new_vig, perl = TRUE
@@ -54,8 +57,16 @@ Rnw2Rmd <- function(from, to, validate = TRUE) {
     else
         FUN <- mdsr::Rnw2Rmd
 
+    # overwrite with mdsr updates
     FUN(to, to)
 
+    new_vig <- readLines(to)
+
+    new_vig <- .add_remove_front_matter(new_vig)
+    new_vig <- .remove_metatags(new_vig)
+    new_vig <- .clean_up_blanks(new_vig)
+    ## write to file
+    writeLines(new_vig, con = to)
 }
 
 .validate_replace_tag_pkg <- function(vig_text) {
@@ -153,22 +164,57 @@ Rnw2Rmd <- function(from, to, validate = TRUE) {
     list(title = title, author = author, date = date)
 }
 
-.add_yaml_front_matter <- function(text) {
-    template <- paste(
+.yaml_front_matter <- function(text) {
+    template <- c(
         "---",
-        "title: {{title}}",
-        "author: {{author}}",
-        "date: {{date}}",
+        "title: \"{{title}}\"",
+        "author: \"{{author}}\"",
+        "date: \"{{date}}\"",
         "output:",
         "  BiocStyle::html_document",
         "vignette: >",
         "  %\\VignetteIndexEntry{ {{title}} }",
         "  %\\VignetteEngine{knitr::rmarkdown}",
         "  %\\VignetteEncoding{UTF-8}",
-        "---", sep = "\n"
+        "---"
     )
 
     datalist <- .identify_front(text)
-    whisker::whisker.render(template, data = datalist)
+    capture.output(cat(
+        whisker::whisker.render(template, data = datalist)
+    ))
 }
 
+.remove_rnw_head <- function(text) {
+    vigind <- grep("^%\\\\Vignette.*", text)
+    text[-vigind]
+}
+
+.remove_tex_chunk <- function(text) {
+    latex_ind <- grep("BiocStyle::latex\\(.*", text)
+    if (length(latex_ind))
+        text <- text[-seq(latex_ind - 1, latex_ind + 1)]
+    text
+}
+
+.add_remove_front_matter <- function(text) {
+    header <- .yaml_front_matter(text)
+    body <- .remove_rnw_head(text)
+    c(header, body)
+}
+
+.remove_metatags <- function(text) {
+   tags <- c("documentclass", "begin", "end", "maketitle", "title", "author")
+   gexpr <- paste0("^\\\\", tags)
+   metaind <- unique(unlist(lapply(gexpr, function(x) { grep(x, text) })))
+   text[-metaind]
+}
+
+.clean_up_blanks <- function(text) {
+    indpos <- which(!nzchar(text))
+    diffs <- diff(indpos)
+    groups <- split(indpos, cumsum(c(1, diffs != 1)))
+    selections <- unlist(lapply(groups, head, 2))
+    rinds <- setdiff(indpos, selections)
+    text[-rinds]
+}
