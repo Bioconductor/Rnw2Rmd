@@ -109,7 +109,7 @@ Rnw2Rmd <- function(from, to, validate = TRUE) {
     pkg %in% db
 }
 
-
+# from mdsr::Rnw2Rmd (archived on CRAN as of 2022-12-22)
 .Rnw2Rmd <- function(path, new_path = NULL)  {
     if (is.null(new_path))
         new_path <- gsub(".Rnw", ".Rmd", path)
