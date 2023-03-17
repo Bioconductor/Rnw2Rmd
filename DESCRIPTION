@@ -12,7 +12,8 @@ Imports:
   BiocManager,
   tools,
   utils,
-  whisker
+  whisker,
+  rmarkdown
 Suggests:
   mdsr
 License: Artistic-2.0
