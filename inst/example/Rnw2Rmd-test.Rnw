@@ -31,7 +31,7 @@ Sometimes inline \R{} code \Rcode{x <-
 
 Here's some \emph{italic} text
 
-Here's an Sexpr that should be evaluated \Sexp{1 + 1}
+Here's an Sexpr that should be evaluated \Sexpr{1 + 1}
 
 \begin{itemize}
 \item One item
@@ -43,5 +43,9 @@ Here's an Sexpr that should be evaluated \Sexp{1 + 1}
 \end{description}
 
 <<>>=
+1 + 1
+@ 
+
+<<named, echo = FALSE>>=
 1 + 1
 @ 
