@@ -34,7 +34,6 @@ limitations include:
 \item The generated Rmd file does not include front-matter 'yaml',
 e.g., title, author, and output format.
 \item Cross-references are not handled.
-\item Code chunks are not translated.
 }
 
 Closely examine the generated markdown file for

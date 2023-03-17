@@ -27,7 +27,6 @@
 #' - The generated Rmd file does not include front-matter 'yaml',
 #'   e.g., title, author, and output format.
 #' - Cross-references are not handled.
-#' - Code chunks are not translated.
 #'
 #' @details Closely examine the generated markdown file for
 #'     `{=latex}`; this indicates LaTeX code that has not be translated.
