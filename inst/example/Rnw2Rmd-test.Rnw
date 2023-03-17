@@ -1,0 +1,47 @@
+\section{First level}
+
+\subsection{Second level}
+
+Nothing to see hear, folks!
+
+The \R{} programming language
+
+\R\ is a programming language.
+
+The name of one programming language is simply \R.
+
+\Biocpkg{BiocStyle} is a \Bioconductor{} package.
+
+The \CRANpkg{knitr} is used to create markdown vignettes.
+
+Sometimes packages, like \Githubpkg{AnVILAz}, are only found on Github.
+
+The \R{} package \Rpackage{foo} is not found in any common repository
+
+\software{samtools} is pretty important in Bioinformatics...
+
+\Robject{mtcars} is a \Rcode{data.frame}.
+
+\Rfunction{data.frame} is a function used to create a \Rcode{data.frame}.
+
+\Rfunction{data.frame()} is a function used to create a \Rcode{data.frame}.
+
+Sometimes inline \R{} code \Rcode{x <-
+1 + 1} can span two lines.
+
+Here's some \emph{italic} text
+
+Here's an Sexpr that should be evaluated \Sexp{1 + 1}
+
+\begin{itemize}
+\item One item
+\item Another item
+\end{itemize}
+
+\begin{description}
+\item[foo] bar
+\end{description}
+
+<<>>=
+1 + 1
+@ 
