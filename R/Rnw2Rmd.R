@@ -156,9 +156,10 @@ Rnw2Rmd <- function(from, to, validate = TRUE) {
     if (.tag.exists("author", text))
         author <- gsub("(.*)(\\\\author\\{)([^\\}]+)(\\})(.*)", "\\3", ptext)
     if (.tag.exists("date", text)) {
-        date <- gsub("(.*)(\\\\date\\{)(.*[^\\}]+)(\\})(.*)", "\\3", ptext)
-        if (identical(date, "\\today"))
+        if (.tag.exists("today", text))
             date <- "`r format(Sys.time(), '%B %d, %Y')`"
+        else
+            date <- gsub("(.*)(\\\\date\\{)(.*[^\\}]+)(\\})(.*)", "\\3", ptext)
     }
 
     list(title = title, author = author, date = date)
@@ -216,5 +217,8 @@ Rnw2Rmd <- function(from, to, validate = TRUE) {
     groups <- split(indpos, cumsum(c(1, diffs != 1)))
     selections <- unlist(lapply(groups, utils::head, 2))
     rinds <- setdiff(indpos, selections)
-    text[-rinds]
+    if (length(rinds))
+        text[-rinds]
+    else
+        text
 }
