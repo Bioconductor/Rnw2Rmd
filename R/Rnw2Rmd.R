@@ -128,10 +128,12 @@ Rnw2Rmd <- function(from, to, validate = TRUE) {
     writeLines(x, new_path)
 }
 
-.tag.exists <- function(tag, text, withOpen = TRUE) {
+.tag.exists <- function(tag, text, withOpen = TRUE, withBracket = FALSE) {
     append <- ""
+    if (withBracket)
+        append <- "\\[.*\\]"
     if (withOpen)
-        append <- "\\{"
+        append <- paste(append, "\\{", sep = "")
     tag_template <- paste0("\\\\{{word}}", append)
     pat <- whisker::whisker.render(tag_template, data = c(word = tag))
     any(grepl(pat, x = text))
@@ -144,10 +146,15 @@ Rnw2Rmd <- function(from, to, validate = TRUE) {
     title <- author <- NULL
     if (.tag.exists("title", text))
         title <- gsub("(.*)(\\\\title\\{)([^\\}]+)(\\})(.*)", "\\3", ptext)
+    else if (.tag.exists("bioctitle", text, withBracket = TRUE))
+        title <- gsub(
+            "(.*)(?<=\\\\bioctitle\\[)(.*\\]\\{)([^\\}]+)(.*)", "\\3",
+            ptext, perl = TRUE
+        )
     if (.tag.exists("author", text))
         author <- gsub("(.*)(\\\\author\\{)([^\\}]+)(\\})(.*)", "\\3", ptext)
     if (.tag.exists("date", text)) {
-        if (.tag.exists("today", text, FALSE))
+        if (.tag.exists("today", text, withOpen = FALSE))
             date <- "`r format(Sys.time(), '%B %d, %Y')`"
         else
             date <- gsub("(.*)(\\\\date\\{)(.*[^\\}]+)(\\})(.*)", "\\3", ptext)
