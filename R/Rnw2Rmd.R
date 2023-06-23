@@ -145,19 +145,25 @@ Rnw2Rmd <- function(from, to, validate = TRUE) {
     ptext <- paste0(text, collapse = " ")
     title <- author <- NULL
     if (.tag.exists("title", text))
-        title <- gsub("(.*)(\\\\title\\{)([^\\}]+)(\\})(.*)", "\\3", ptext)
+        title <- gsub(
+            "(.*)(?<=\\\\title\\{)([^\\}]+)(.*)", "\\2", ptext, perl = TRUE
+        )
     else if (.tag.exists("bioctitle", text, withBracket = TRUE))
         title <- gsub(
             "(.*)(?<=\\\\bioctitle\\[)(.*\\]\\{)([^\\}]+)(.*)", "\\3",
             ptext, perl = TRUE
         )
     if (.tag.exists("author", text))
-        author <- gsub("(.*)(\\\\author\\{)([^\\}]+)(\\})(.*)", "\\3", ptext)
+        author <- gsub(
+            "(.*)(?<=\\\\author\\{)([^\\}]+)(.*)", "\\2", ptext, perl = TRUE
+        )
     if (.tag.exists("date", text)) {
         if (.tag.exists("today", text, withOpen = FALSE))
             date <- "`r format(Sys.time(), '%B %d, %Y')`"
         else
-            date <- gsub("(.*)(\\\\date\\{)(.*[^\\}]+)(\\})(.*)", "\\3", ptext)
+            date <- gsub(
+                "(.*)(?<=\\\\date\\{)([^\\}]+)(.*)", "\\2", ptext, perl = TRUE
+            )
     }
 
     list(title = title, author = author, date = date)
