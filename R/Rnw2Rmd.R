@@ -33,28 +33,9 @@ Rnw2Rmd <- function(from, to, validate = TRUE) {
     new_vig <- gsub("%%", "", fixed = TRUE, new_vig)
     ## replace {} with `` in special R tags
     new_vig <- .remove_tex_chunk(new_vig)
-    new_vig <- gsub(
-        "(\\\\(Rclass|Rfunction|Rcode|Robject)\\{)([^\\}]+)(\\})",
-        "`\\3`",
-        new_vig
-    )
     ## replace funky sections
     new_vig <- gsub("(\\\\section\\*+\\{)([^\\}]+)(\\})", "## \\2", new_vig)
-    ## replace complicated code
-    new_vig <- gsub(
-        "\\\\Rcode\\{(?<=\\{)(.+?)(?=\\})\\}", "`\\1`", new_vig, perl = TRUE
-    )
-
-    ## replace Rpkg with Biocpkg or CRANpkg
-    if (!validate)
-        new_vig <- gsub(
-            "(\\\\Rpackage\\{)([^\\}]+)(\\})", "`r Biocpkg(\"\\2\")`", new_vig
-        )
-    else
-        new_vig <- .validate_replace_tag_pkg(new_vig)
-
-    ## replace \R with R
-    new_vig <- gsub("\\\\R(['\" ]+)", "R\\1", new_vig)
+    new_vig <- .add_remove_front_matter(new_vig)
     ## write to file
     writeLines(new_vig, con = to)
 
@@ -66,9 +47,8 @@ Rnw2Rmd <- function(from, to, validate = TRUE) {
     # overwrite with mdsr updates
     FUN(to, to)
 
-    new_vig <- readLines(to)
-
-    new_vig <- .add_remove_front_matter(new_vig)
+    output <- Rnw2RmdPandoc(input = to, overwrite = TRUE)
+    new_vig <- readLines(output)
     new_vig <- .remove_metatags(new_vig)
     new_vig <- .clean_up_blanks(new_vig)
     ## write to file
@@ -116,13 +96,13 @@ Rnw2Rmd <- function(from, to, validate = TRUE) {
 }
 
 # from mdsr::Rnw2Rmd (archived on CRAN as of 2022-12-22)
+# modified for Rnw2RmdPandoc
 .Rnw2Rmd <- function(path, new_path = NULL)  {
     if (is.null(new_path))
         new_path <- gsub(".Rnw", ".Rmd", path)
     x <- readLines(path)
     x <- gsub("(<<)(.*)(>>=)", "```{r \\2}", x)
     x <- gsub("^@", "```", x)
-    x <- gsub("(\\\\Sexpr\\{)([^\\}]+)(\\})", "`r \\2`", x)
     x <- gsub("(\\\\chapter\\{)([^\\}]+)(\\})", "# \\2", x)
     x <- gsub("(\\\\section\\{)([^\\}]+)(\\})", "## \\2", x)
     x <- gsub("(\\\\subsection\\{)([^\\}]+)(\\})", "### \\2",
