@@ -15,10 +15,16 @@
 #' @return Called for the side effect of creating an RMarkdown document from the
 #'   `Rnw` one in the same location (default).
 #'
+#' @importFrom tools file_ext
 #' @export
 Rnw2Rmd <- function(from, to, validate = TRUE) {
+    if (missing(from) || !file.exists(from))
+        stop("'from' input must be a valid file")
+    fileext <- file_ext(from)
+    if (!identical(tolower(fileext), "rnw"))
+        stop("'from' file must have an 'Rnw' extension")
     if (missing(to))
-        to <- gsub(tools::file_ext(from), "Rmd", from)
+        to <- gsub(fileext, "Rmd", from)
 
     new_vig <- readLines(from)
     ## fix escaped underscores
