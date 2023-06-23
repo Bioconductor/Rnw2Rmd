@@ -141,6 +141,7 @@ Rnw2Rmd <- function(from, to, validate = TRUE) {
 
     date <- "`r format(Sys.time(), '%B %d, %Y')`"
     ptext <- paste0(text, collapse = " ")
+    title <- author <- NULL
     if (.tag.exists("title", text))
         title <- gsub("(.*)(\\\\title\\{)([^\\}]+)(\\})(.*)", "\\3", ptext)
     if (.tag.exists("author", text))
