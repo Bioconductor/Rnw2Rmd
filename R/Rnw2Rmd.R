@@ -166,7 +166,8 @@ Rnw2Rmd <- function(from, to, validate = TRUE) {
             )
     }
 
-    list(title = title, author = author, date = date)
+    res <- list(title = title, author = author, date = date)
+    lapply(res, function(x) gsub("\\\\", "", trimws(x), fixed = TRUE))
 }
 
 .yaml_front_matter <- function(text) {
