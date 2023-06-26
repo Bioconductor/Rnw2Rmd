@@ -159,13 +159,37 @@ Rnw2Rmd <- function(from, to, validate = TRUE) {
 }
 
 .remove_meta_head_tags <- function(text) {
-   tags <- c(
-       "documentclass", "begin", "end", "maketitle",
+    tags <- c(
+       "documentclass", "maketitle", "bioctitle",
        "title", "author", "SweaveOpts"
-   )
-   gexpr <- paste0("^\\\\", tags)
-   metaind <- unique(unlist(lapply(gexpr, function(x) { grep(x, text) })))
-   text[-metaind]
+    )
+    uses_curly <- c(TRUE, FALSE, TRUE, TRUE, TRUE, TRUE)
+    rm_ind <- Map(
+        function(x, y) {
+            .start_end_tag_idx(x, text, y)
+        },
+        x = tags,
+        y = uses_curly
+    )
+    rm_ind <- sort(unlist(rm_ind, use.names = FALSE))
+    if (length(rm_ind))
+        text[-rm_ind]
+    else
+        text
+}
+
+.start_end_tag_idx <- function(tag, text, curly = TRUE) {
+    regtag <- paste0("\\\\", tag)
+    start <- grep(regtag, text)
+    if (length(start) && curly) {
+        end <- start
+        while (!grepl("}", text[end], fixed = TRUE)) {
+            end <- end + 1
+        }
+        start:end
+    } else {
+        start
+    }
 }
 
 .clean_up_blanks <- function(text) {
