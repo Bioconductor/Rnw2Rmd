@@ -18,7 +18,7 @@ Sometimes packages, like \Githubpkg{AnVILAz}, are only found on Github.
 
 The \R{} package \Rpackage{foo} is not found in any common repository
 
-\software{samtools} is pretty important in Bioinformatics...
+\software{samtools} is pretty \textit{important} in Bioinformatics...
 
 \Robject{mtcars} is a \Rcode{data.frame}.
 
