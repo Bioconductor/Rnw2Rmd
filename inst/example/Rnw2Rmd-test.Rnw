@@ -2,7 +2,9 @@
 
 \subsection{Second level}
 
-Nothing to see hear, folks!
+\subsubsection{Thrid level}
+
+Nothing to see here, folks!
 
 The \R{} programming language
 
@@ -12,7 +14,7 @@ The name of one programming language is simply \R.
 
 \Biocpkg{BiocStyle} is a \Bioconductor{} package.
 
-The \CRANpkg{knitr} is used to create markdown vignettes.
+The \CRANpkg{knitr} is used to create \textbf{markdown} vignettes.
 
 Sometimes packages, like \Githubpkg{AnVILAz}, are only found on Github.
 
@@ -44,8 +46,8 @@ Here's an Sexpr that should be evaluated \Sexpr{1 + 1}
 
 <<>>=
 1 + 1
-@ 
+@
 
 <<named, echo = FALSE>>=
 1 + 1
-@ 
+@
