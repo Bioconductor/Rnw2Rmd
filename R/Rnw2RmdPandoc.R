@@ -53,7 +53,7 @@ Rnw2RmdPandoc <-
     )
 
     if (is.null(output)) {
-        output <- paste0(file_path_sans_ext(input), ".Rmd")
+        output <- .file_name_rnw_to_rmd(input)
         stopifnot(!file.exists(output))
     }
 
