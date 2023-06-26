@@ -1,6 +1,6 @@
 Package: Rnw2Rmd
 Title: Initial conversion from Rnw to Rmd
-Version: 0.99.0
+Version: 0.99.1
 Authors@R: 
     person("Marcel", "Ramos", , "marcel.ramos@sph.cuny.edu",
         c("aut", "cre"), c(ORCID = "0000-0002-3242-0582")
