@@ -1,0 +1,58 @@
+---
+title: "Conversion of Sweave vignettes to R Markdown"
+output: BiocStyle::html_document
+vignette: >
+  %\VignetteIndexEntry{Conversion of Sweave vignettes to R Markdown}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Introduction
+
+The Rnw2Rmd package automates parts of the process of converting Sweave vignettes to R Markdown (or Quarto). It is employed by the conversion template for Bioconductor packages at https://github.com/waldronlab/sweave2rmd_conversiontemplate. 
+
+```{r setup}
+library(Rnw2Rmd)
+```
+
+
+# Usage
+
+We demonstrate usage on the short `useProbeInfo.Rnw` vignette from the `r Biocpkg("annotate")` package:
+```{r, message=FALSE}
+download.file(url = "https://gist.githubusercontent.com/lwaldron/304388a132b29b802f7241c71c90365b/raw/fb10e070fe2040fc7fab4621130909a319d07c20/useProbeInfo.Rnw",
+              destfile="useProbeInfo.Rnw")
+```
+Perform the conversion:
+```{r}
+Rnw2Rmd(from = "useProbeInfo.Rnw", to = "useProbeInfo.Rmd", validate = FALSE)
+```
+
+Note: `validate=FALSE` is set to avoid an error:
+```
+Error in FUN(X[[i]], ...) : 
+  \Rpackage{\newcommand{\Rpackage}[1]{{\textit{#1}}}} is not in CRAN or Bioconductor
+```
+
+# The product
+
+Compare the first 40 lines of the source document:
+```{r}
+readLines("useProbeInfo.Rnw") |> head(40)
+```
+
+and the generated document. This will still have to be tested and corrected manually,
+but this should be a lot less work than starting from scratch. Please report issues at
+https://github.com/Bioconductor/sweave2rmd/issues. 
+
+```{r}
+readLines("useProbeInfo.Rmd") |> head(40)
+```
+

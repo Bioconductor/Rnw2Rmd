@@ -1,6 +1,6 @@
 Package: Rnw2Rmd
 Title: Initial conversion from Rnw to Rmd
-Version: 0.99.2
+Version: 0.100.0
 Authors@R: 
     person("Marcel", "Ramos", , "marcel.ramos@sph.cuny.edu",
         c("aut", "cre"), c(ORCID = "0000-0002-3242-0582")
@@ -15,9 +15,12 @@ Imports:
   whisker,
   rmarkdown
 Suggests:
-  mdsr,
-  testthat
+    knitr,
+    mdsr,
+    testthat,
+    BiocStyle
 License: Artistic-2.0
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
+VignetteBuilder: knitr
