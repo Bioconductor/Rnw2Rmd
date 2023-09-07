@@ -18,41 +18,40 @@ knitr::opts_chunk$set(
 
 The Rnw2Rmd package automates parts of the process of converting Sweave vignettes to R Markdown (or Quarto). It is employed by the conversion template for Bioconductor packages at https://github.com/waldronlab/sweave2rmd_conversiontemplate. 
 
+Output Rmd documents will still have to be tested and corrected manually,
+but this should be a lot less work than starting from scratch. Please report issues at https://github.com/Bioconductor/sweave2rmd/issues. 
+
 ```{r setup}
 library(Rnw2Rmd)
 ```
 
-
 # Usage
 
-We demonstrate usage on the short `useProbeInfo.Rnw` vignette from the `r Biocpkg("annotate")` package:
+We demonstrate usage on demo `Rnw2Rmd-test.Rnw` vignette included in the 
+`inst/example` directory of this package:
 ```{r, message=FALSE}
-download.file(url = "https://gist.githubusercontent.com/lwaldron/304388a132b29b802f7241c71c90365b/raw/fb10e070fe2040fc7fab4621130909a319d07c20/useProbeInfo.Rnw",
-              destfile="useProbeInfo.Rnw")
-```
-Perform the conversion:
-```{r}
-Rnw2Rmd(from = "useProbeInfo.Rnw", to = "useProbeInfo.Rmd", validate = FALSE)
+fpath <- system.file("example/Rnw2Rmd-test.Rnw", package="Rnw2Rmd")
 ```
 
-Note: `validate=FALSE` is set to avoid an error:
+Perform the conversion:
+```{r}
+Rnw2Rmd(from = fpath, to = "Rnw2Rmd-test.Rmd", validate = TRUE)
 ```
-Error in FUN(X[[i]], ...) : 
-  \Rpackage{\newcommand{\Rpackage}[1]{{\textit{#1}}}} is not in CRAN or Bioconductor
-```
+
+Note, some validation errors are not actually much of a problem and 
+you can use `validate=FALSE` to skip validation and still get a useful draft
+conversion. 
 
 # The product
 
-Compare the first 40 lines of the source document:
+Compare the source document:
 ```{r}
-readLines("useProbeInfo.Rnw") |> head(40)
+noquote(readLines(fpath))
 ```
 
-and the generated document. This will still have to be tested and corrected manually,
-but this should be a lot less work than starting from scratch. Please report issues at
-https://github.com/Bioconductor/sweave2rmd/issues. 
+and the generated document:
 
 ```{r}
-readLines("useProbeInfo.Rmd") |> head(40)
+noquote(readLines("Rnw2Rmd-test.Rmd") )
 ```
 
