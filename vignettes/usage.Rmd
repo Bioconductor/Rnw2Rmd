@@ -1,10 +1,21 @@
 ---
 title: "Conversion of Sweave vignettes to R Markdown"
-output: BiocStyle::html_document
+date: "`r BiocStyle::doc_date()`"
+author:
+- name: Levi Waldron
+  affiliation: CUNY School of Public Health, New York, NY
+- name: Marcel Ramos
+  affiliation:
+    - CUNY School of Public Health, New York, NY
+    - Roswell Park Comprehensive Cancer Center, Buffalo, NY
 vignette: >
   %\VignetteIndexEntry{Conversion of Sweave vignettes to R Markdown}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+output:
+  BiocStyle::html_document:
+    toc_float: true
+package: Rnw2Rmd
 ---
 
 ```{r, include = FALSE}
@@ -16,42 +27,48 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-The Rnw2Rmd package automates parts of the process of converting Sweave vignettes to R Markdown (or Quarto). It is employed by the conversion template for Bioconductor packages at https://github.com/waldronlab/sweave2rmd_conversiontemplate. 
-
-Output Rmd documents will still have to be tested and corrected manually,
-but this should be a lot less work than starting from scratch. Please report issues at https://github.com/Bioconductor/sweave2rmd/issues. 
-
-```{r setup}
+```{r,include=TRUE,results="hide",message=FALSE,warning=FALSE}
 library(Rnw2Rmd)
 ```
+
+The `Rnw2Rmd` package automates parts of the process of converting Sweave
+vignettes to R Markdown (or Quarto). It is employed by the conversion template
+for Bioconductor packages at
+https://github.com/waldronlab/sweave2rmd_conversiontemplate.
+
+Output Rmd documents will still have to be tested and corrected manually, but
+this should be a lot less work than starting from scratch. Please report issues
+at https://github.com/Bioconductor/sweave2rmd/issues.
 
 # Usage
 
 We demonstrate usage on demo `Rnw2Rmd-test.Rnw` vignette included in the 
 `inst/example` directory of this package:
+
 ```{r, message=FALSE}
 fpath <- system.file("example/Rnw2Rmd-test.Rnw", package="Rnw2Rmd")
 ```
 
 Perform the conversion:
+
 ```{r}
-Rnw2Rmd(from = fpath, to = "Rnw2Rmd-test.Rmd", validate = TRUE)
+dir.create(tempdir <- tempfile())
+test_rmd <- file.path(tempdir, "Rnw2Rmd-test.Rmd")
+Rnw2Rmd(from = fpath, to = test_rmd, validate = TRUE)
 ```
 
-Note, some validation errors are not actually much of a problem and 
-you can use `validate=FALSE` to skip validation and still get a useful draft
-conversion. 
+Note, some validation errors are not actually much of a problem and you can use
+`validate=FALSE` to skip validation and still get a useful draft conversion.
 
 # The product
 
 Compare the source document:
-```{r}
+```{r,echo=FALSE}
 noquote(readLines(fpath))
 ```
 
 and the generated document:
 
-```{r}
-noquote(readLines("Rnw2Rmd-test.Rmd") )
+```{r,echo=FALSE}
+noquote(readLines(test_rmd))
 ```
-
